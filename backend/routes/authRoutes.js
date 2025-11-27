@@ -1,19 +1,12 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const express = require('express');
+const { registerUser, loginUser, getProfile, updateUserProfile } = require('../controller/authController');
+const { protect } = require('../middlewares/authMiddlewares');
 
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-      expiresIn: "7d"
-    });
-};
+const router = express.Router();
 
-exports.registerUser = async (req, res) => {
-    const {name, email, password} = req.body;
+router.post('/register', registerUser);
+router.post('/login', loginUser);
+router.get('/profile', protect, getProfile);
+router.put('/profile', protect, updateUserProfile);
 
-    try {
-        
-    } catch (error) {
-        res.status(500).json({message: "Serevr error"});
-    }
-};
-// 35:00
+module.exports = router;
