@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router();
-const{
+const {
     createBook,
     getBooks,
     getBookById,
@@ -8,7 +8,7 @@ const{
     deleteBook,
     updateBookCover,
 } = require("../controller/bookController");
-const {protect} = require("../middlewares/uploadMiddlewares");
+const { protect } = require("../middlewares/authMiddlewares");
 const upload = require("../middlewares/uploadMiddlewares");
 
 router.use(protect);

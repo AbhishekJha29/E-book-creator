@@ -23,7 +23,7 @@ const bookSchema = new mongoose.Schema(
             ref: "User",
         },
         title: {
-            types: String,
+            type: String,
             required: true,
         },
         subtitle: {
