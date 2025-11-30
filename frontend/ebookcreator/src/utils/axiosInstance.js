@@ -3,18 +3,18 @@ import { BASE_URL } from "./apiPaths"
 
 
 const axiosInstance = axios.create({
-     baseURL: BASE_URL,
-     timeout: 80000,
-     headers: {
-      "Content-Type" : "application/json",
-      Accept: "application/json",
-     },
+  baseURL: BASE_URL,
+  timeout: 80000,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("token");
-    if(accessToken){
+    if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
@@ -29,14 +29,14 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    if(error.response){
-      if(error.response.status === 500){
+    if (error.response) {
+      if (error.response.status === 500) {
         console.error("Server error. Please try again later");
       }
-    }else if(error.response.status === "ECONNABORTED"){
-        console.error("Request timeout. Please try again.");
-      }
-      return Promise.reject(error);
+    } else if (error.response.status === "ECONNABORTED") {
+      console.error("Request timeout. Please try again.");
+    }
+    return Promise.reject(error);
   }
 );
 

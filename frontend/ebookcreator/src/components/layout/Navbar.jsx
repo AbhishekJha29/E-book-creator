@@ -50,7 +50,7 @@ const Navbar = () => {
         <div className="hidden lg:flex items-center space-x-3">
           {isAuthenticated ? (
             <ProfileDropdown
-              isOpen={profileDropdown}
+              isOpen={profileDropdownOpen}
               onToggle={(e) => {
                 e.stopPropagation();
                 setProfileDropdownOpen(!profileDropdownOpen);
