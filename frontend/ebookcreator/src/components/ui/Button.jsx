@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Button = ({ variant = "primary", size = "md", isLoading = false, children, icon: Icon, className = "", ...props }) => {
+const Button = ({ variant = "primary", size = "md", isLoading = false, children, icon, className = "", ...props }) => {
 
   const variants = {
     primary: "bg-gradient-to-r from-violet-400 to-violet-500 hover:bg-violet-700 text-white shadow-sm hover:shadow-md",
@@ -24,7 +24,6 @@ const Button = ({ variant = "primary", size = "md", isLoading = false, children,
       {isLoading ? (
         <svg className='w-5 h-5 animate-spin' fill='none' viewBox='0 0 24 24'>
           <circle className='opacity-25' cx="12" cy="12" r="10" stroke='currentColor' strokeWidth="4"></circle>
-          {/* Corrected spinner path */}
           <path
             className='opacity-75'
             fill='currentColor'
@@ -33,7 +32,7 @@ const Button = ({ variant = "primary", size = "md", isLoading = false, children,
         </svg>
       ) : (
         <>
-          {Icon && <Icon className="w-4 h-4 mr-2" />}
+          {icon && <span className="w-4 h-4 mr-2">{icon}</span>}
           {children}
         </>
       )}
