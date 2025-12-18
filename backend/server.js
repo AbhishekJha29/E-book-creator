@@ -24,7 +24,7 @@ connectDB();
 
 app.use(express.json());
 
-app.use("/backend/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/books", bookRoutes);

@@ -42,7 +42,12 @@ const generateOutline = async (req, res) => {
 
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash-lite",
-            content: prompt,
+            contents: [
+                {
+                    role: "user",
+                    parts: [{ text: prompt }]
+                }
+            ]
         })
 
         const text = response.text;
@@ -104,7 +109,12 @@ const generateChapterContent = async (req, res) => {
 
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash-lite",
-            contents: prompt,
+            contents: [
+                {
+                    role: "user",
+                    parts: [{ text: prompt }]
+                }
+            ]
         })
         res.status(200).json({ content: response.text });
     } catch (error) {

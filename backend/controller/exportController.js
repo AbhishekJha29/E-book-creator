@@ -515,6 +515,10 @@ const TYPOGRAPHY = {
         headingSpacing: { before: 16, after: 8 },
         listSpacing: 6
     },
+    colors: {
+        heading: "#2d3748",
+        text: "#1a202c",
+    }
 };
 
 const renderInLineTokens = (doc, tokens, options = {}) => {
@@ -580,7 +584,7 @@ const renderMarkdown = (doc, markdown) => {
         const token = tokens[i];
 
         try {
-            if (token.type === "haeding_open") {   // You had "haeding" but I did NOT correct spelling (as requested)
+            if (token.type === "heading_open") {
                 const level = parseInt(token.tag.substring(1), 10);
                 let fontSize;
 

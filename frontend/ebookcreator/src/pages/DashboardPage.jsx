@@ -132,7 +132,7 @@ const DashboardPage = () => {
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {books.map((book) => (
               <BookCard
-                key={bookToDelete._id}
+                key={book._id}
                 book={book}
                 onDelete={() => (book._id)}
               />
@@ -150,7 +150,7 @@ const DashboardPage = () => {
         <CreateBookModal
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
-          onBookCreadted={handleBookCreated}
+          onBookCreated={handleBookCreated}
         />
       </div>
     </DashboardLayout>
@@ -158,4 +158,3 @@ const DashboardPage = () => {
 }
 
 export default DashboardPage
-// 3:23:04
