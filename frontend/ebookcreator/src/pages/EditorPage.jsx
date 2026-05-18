@@ -121,32 +121,39 @@ const EditorPage = () => {
   };
 
   const handleCoverImageUpload = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const formData = new FormData();
-  formData.append("coverImage", file);
-  setIsUploading(true);
+    console.log("Selected file:", file);
+    console.log("file instanceof File:", file instanceof File);
 
-  try {
-    const response = await axiosInstance.put(
-      `${API_PATHS.BOOKS.UPDATE_COVER}/${bookId}`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const formData = new FormData();
+    formData.append("coverImage", file);
+    
+    console.log("FormData coverImage:", formData.get("coverImage"));
 
-    setBook(response.data);
-    toast.success("Cover image updated");
-  } catch (error) {
-    toast.error("Failed to upload cover image");
-  } finally {
-    setIsUploading(false);
-  }
-};
+    setIsUploading(true);
+
+    try {
+      const response = await axiosInstance.put(
+        `${API_PATHS.BOOKS.UPDATE_COVER}/${bookId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      setBook(response.data);
+      toast.success("Cover image updated");
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("Failed to upload cover image");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
 
   const handleGenerateChapterContent = async (index) => {
@@ -167,7 +174,7 @@ const EditorPage = () => {
       const updatedChapters = [...book.chapters];
       updatedChapters[index].content = response.data.content;
 
-      const updatedBook = { ...book, chapter: updatedChapters};
+      const updatedBook = { ...book, chapters: updatedChapters};
       setBook(updatedBook);
       toast.success(`Content for "${chapter.title}" generated!`);
 
@@ -306,7 +313,7 @@ const EditorPage = () => {
                 <button 
                 onClick={() => setActiveTab("details")}
                 className={`flex items-center justify-center flex-1 py-2 px-4 text-sm font-medium rounded-md transition-colors duration-200 whitespace-nowrap ${
-                  activeTab === "editor"
+                  activeTab === "details"
                       ? "bg-white text-slate-800 shadow-sm"
                       : "text-slate-500 hover:text-slate-700"
                 }`}>

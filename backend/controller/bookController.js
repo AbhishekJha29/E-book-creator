@@ -1,4 +1,5 @@
 const Book = require("../models/Book")
+const mongoose = require("mongoose");
 
 
 
@@ -91,25 +92,72 @@ const deleteBook = async (req, res) => {
 };
 
 const updateBookCover = async (req, res) => {
+    const { id } = req.params;
+    console.log("Updating Book Cover - ID:", id);
+    console.log("Content-Type:", req.headers["content-type"]);
+    console.log("Request Body:", req.body);
+    console.log("Request File:", req.file);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: "Invalid book ID" });
+    }
+
     try {
-        const book = await Book.findById(req.params.id);
+        const book = await Book.findById(id);
         if (!book) {
+            console.log("Book not found for ID:", id);
             return res.status(404).json({ message: "Book not found" });
         }
+
         if (book.userId.toString() !== req.user._id.toString()) {
             return res.status(401).json({ message: "Not authorized to update this book" });
         }
 
-
-        if(req.file){
+        if (req.file) {
             book.coverImage = `/uploads/${req.file.filename}`;
-        }else{
-             return res.status(400).json({ message: "No image file provided" });
+        } else {
+            console.log("No file found in request for book:", id);
+            return res.status(400).json({ 
+                message: "No image file provided",
+                debug: {
+                    contentType: req.headers["content-type"],
+                    hasBody: Object.keys(req.body).length > 0
+                }
+            });
         }
 
         const updatedBook = await book.save();
-         res.status(200).json(updatedBook);
+        console.log("Book cover updated successfully:", id);
+        res.status(200).json(updatedBook);
     } catch (error) {
+        console.error("Error updating book cover:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+const getBookCover = async (req, res) => {
+    const { id } = req.params;
+    console.log("Incoming Book ID for cover:", id);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: "Invalid book ID" });
+    }
+
+    try {
+        const book = await Book.findById(id);
+        console.log("Fetched Book:", book);
+
+        if (!book) {
+            return res.status(404).json({ message: "Book not found" });
+        }
+
+        if (!book.coverImage) {
+            return res.status(404).json({ message: "Book has no cover image" });
+        }
+
+        res.status(200).json({ coverImage: book.coverImage });
+    } catch (error) {
+        console.error("Error fetching book cover:", error);
         res.status(500).json({ message: "Server error" });
     }
 };
@@ -121,4 +169,5 @@ module.exports = {
     updateBook,
     deleteBook,
     updateBookCover,
+    getBookCover,
 };
