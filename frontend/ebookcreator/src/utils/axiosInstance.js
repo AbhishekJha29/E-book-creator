@@ -31,11 +31,16 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     if (error.response) {
-      if (error.response.status === 500) {
+      if (error.response.status === 401) {
+        localStorage.clear();
+        window.location.href = "/login";
+      } else if (error.response.status === 500) {
         console.error("Server error. Please try again later");
       }
-    } else if (error.response.status === "ECONNABORTED") {
+    } else if (error.code === "ECONNABORTED") {
       console.error("Request timeout. Please try again.");
+    } else {
+      console.error("A network error occurred.");
     }
     return Promise.reject(error);
   }

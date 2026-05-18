@@ -134,7 +134,7 @@ const DashboardPage = () => {
               <BookCard
                 key={book._id}
                 book={book}
-                onDelete={() => (book._id)}
+                onDelete={setBookToDelete}
               />
             ))}
           </div>

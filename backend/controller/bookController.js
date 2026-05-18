@@ -7,7 +7,7 @@ const createBook = async (req, res) => {
         const { title, author, subtitle, chapters } = req.body;
 
         if (!title || !author) {
-            res.status(400).json({ message: "Please provide a title and author" });
+            return res.status(400).json({ message: "Please provide a title and author" });
         }
 
         const book = await Book.create({
@@ -59,10 +59,16 @@ const updateBook = async (req, res) => {
         if (book.userId.toString() !== req.user._id.toString()) {
             return res.status(401).json({ message: "Not authorized to update this book" });
         }
-        const updateBook = await Book.findByIdAndUpdate(req.params.id, req.body, {
+
+        // Prevent overwriting coverImage with empty string if not provided
+        if (req.body.coverImage === "" && book.coverImage) {
+            delete req.body.coverImage;
+        }
+
+        const updatedBook = await Book.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
         })
-        res.status(200).json(updateBook);
+        res.status(200).json(updatedBook);
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
@@ -75,7 +81,7 @@ const deleteBook = async (req, res) => {
             return res.status(404).json({ message: "Book not found" });
         }
         if (book.userId.toString() !== req.user._id.toString()) {
-            return res.status(401).json({ message: "not authorized to delete this book " });
+            return res.status(401).json({ message: "Not authorized to delete this book" });
         }
         await book.deleteOne();
         res.status(200).json({ message: "Book deleted successfully" });
@@ -91,14 +97,14 @@ const updateBookCover = async (req, res) => {
             return res.status(404).json({ message: "Book not found" });
         }
         if (book.userId.toString() !== req.user._id.toString()) {
-            return res.status(401).json({ message: "not authorized to delete this book " });
+            return res.status(401).json({ message: "Not authorized to update this book" });
         }
 
 
         if(req.file){
             book.coverImage = `/uploads/${req.file.filename}`;
         }else{
-             return res.status(400).json({ message: "No image file provided " });
+             return res.status(400).json({ message: "No image file provided" });
         }
 
         const updatedBook = await book.save();

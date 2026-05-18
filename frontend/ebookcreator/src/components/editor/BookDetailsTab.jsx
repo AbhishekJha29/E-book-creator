@@ -10,9 +10,9 @@ const BookDetailsTab = ({
     isUploading,
     fileInputRef,
 }) => {
-    const coverImageUrl = book.coverImage.startsWith('http')
+    const coverImageUrl = (book.coverImage && book.coverImage.startsWith('http'))
     ? book.coverImage
-    : `${BASE_URL}/backend${book.coverImage}`.replace(/\\/g, '/');
+    : (book.coverImage ? `${BASE_URL}${book.coverImage}`.replace(/\\/g, '/') : '');
 
     return <div className="p-8 max-w-4xl mx-auto">
         <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
@@ -21,7 +21,7 @@ const BookDetailsTab = ({
                 <InputField label="Title" name="title" value={book.title} onChange={onBookChange}/>
                 <InputField label="Author" name="author" value={book.author} onChange={onBookChange}/>
                 <div className="md:grid-cols-2">
-                    <InputField label="SubTitle" name="subTitle" value={book.subTitle || ''} onChange={onBookChange}/>
+                    <InputField label="SubTitle" name="subtitle" value={book.subtitle || ''} onChange={onBookChange}/>
                 </div>
             </div>
         </div>

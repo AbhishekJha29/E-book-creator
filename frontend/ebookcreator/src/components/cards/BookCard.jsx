@@ -6,7 +6,7 @@ const BookCard = ({ book, onDelete }) => {
   const navigate = useNavigate();
 
   const coverImageUrl = book.coverImage
-    ? `${BASE_URL}/backend${book.coverImage}`.replace(/\\/g, "/")
+    ? `${BASE_URL}${book.coverImage}`.replace(/\\/g, "/")
     : null;
 
   return (
@@ -21,7 +21,10 @@ const BookCard = ({ book, onDelete }) => {
             src={coverImageUrl}
             alt={book.title}
             className="w-full aspect-[16/25] object-cover transition-transform duration-500 group-hover:scale-105"
-            onError={(e) => { e.target.style.display = "none"; }}
+            onError={(e) => { 
+              console.error("Failed to load image:", coverImageUrl);
+              e.target.style.display = "none"; 
+            }}
           />
         ) : (
           <div className="w-full aspect-[16/25] bg-gray-200"></div>

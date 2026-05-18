@@ -56,7 +56,7 @@ exports.loginUser = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        const user = req.user;
         res.json({
             _id: user._id,
             name: user.name,
@@ -71,7 +71,7 @@ exports.getProfile = async (req, res) => {
 
 exports.updateUserProfile = async (req, res) => {
     try {
-        const user = await User.findById(res.user.id);
+        const user = await User.findById(req.user.id);
         if (user) {
             user.name = req.body.name || user.name;
             const updatedUser = await user.save();
