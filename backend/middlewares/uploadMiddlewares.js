@@ -2,42 +2,55 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const uploadDir = "uploads";
-if (!fs.existsSync(uploadDir)) {
+// Use /tmp on Vercel, local uploads folder in development
+const uploadDir = process.env.VERCEL === "1" ? "/tmp" : "uploads";
+
+// Only create uploads directory when running locally
+if (process.env.VERCEL !== "1") {
+  if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
+  }
 }
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb){
-        cb(null, uploadDir);
-    },
-    filename: function (req, file, cb){
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(
-            null, 
-            `${file.fieldname || 'coverImage'}-${uniqueSuffix}${path.extname(file.originalname)}`
-        );
-    },
+  destination: function (req, file, cb) {
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix =
+      Date.now() + "-" + Math.round(Math.random() * 1e9);
+
+    cb(
+      null,
+      `${file.fieldname || "coverImage"}-${uniqueSuffix}${path.extname(
+        file.originalname
+      )}`
+    );
+  },
 });
 
 function checkFileType(file, cb) {
-    const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase())
-    const mimetype = filetypes.test(file.mimetype);
+  const filetypes = /jpeg|jpg|png|gif/;
+  const extname = filetypes.test(
+    path.extname(file.originalname).toLowerCase()
+  );
+  const mimetype = filetypes.test(file.mimetype);
 
-    if (mimetype && extname) {
-        return cb(null, true);
-    }else{
-        cb("Error: Images Only!");
-    }
+  if (mimetype && extname) {
+    cb(null, true);
+  } else {
+    cb(new Error("Images Only!"));
+  }
 }
 
 const upload = multer({
-    storage: storage,
-    limits: { fileSize: 2 * 1024 * 1024},
-    fileFilter: function (req, file, cb){
-        checkFileType(file, cb);
-    },
+  storage,
+  limits: {
+    fileSize: 2 * 1024 * 1024, // 2MB
+  },
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
 }).single("coverImage");
 
-module.exports = upload; 
+module.exports = upload;
