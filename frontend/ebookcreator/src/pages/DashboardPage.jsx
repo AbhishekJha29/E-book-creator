@@ -15,8 +15,8 @@ const BookCardSkeleton = () => (
   <div className="animate-pulse bg-white border border-slate-200 rounded-lg">
     <div className="w-full aspect-[16/25] bg-slate-200 rounded-t-lg"></div>
     <div className="p-4">
-      <div className="h-6 bg-slate-200 rounded-w-3/4 mb-2"></div>
-      <div className="h-4 bg-slate-200 rounded-w-1/2"></div>
+      <div className="h-6 bg-slate-200 w-3/4 rounded mb-2"></div>
+      <div className="h-4 bg-slate-200 w-1/2 rounded"></div>
     </div>
   </div>
 );
@@ -92,6 +92,8 @@ const DashboardPage = () => {
     navigate(`/editor/${bookId}`);
   }
 
+  const gridClasses = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6";
+
   return (
     <DashboardLayout>
       <div className="container mx-auto p-6">
@@ -106,8 +108,8 @@ const DashboardPage = () => {
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {Array.from({ length: 4 }).map((_, i) => (
+          <div className={gridClasses}>
+            {Array.from({ length: 5 }).map((_, i) => (
               <BookCardSkeleton key={i} />
             ))}
           </div>
@@ -129,7 +131,7 @@ const DashboardPage = () => {
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className={gridClasses}>
             {books.map((book) => (
               <BookCard
                 key={book._id}

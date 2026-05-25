@@ -52,11 +52,11 @@ const BookCard = ({ book, onDelete }) => {
 
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent backdrop-blur-xs"></div>
+      <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent backdrop-blur-[2px]"></div>
         <div className="relative">
-          <h3 className="font-semibold text-white text-sm leading-tight line-clamp-2 mb-1">{book.title}</h3>
-          <p className="text-[13px] text-gray-300 font-medium">{book.author}</p>
+          <h3 className="font-bold text-white text-base leading-tight line-clamp-2 mb-1.5">{book.title}</h3>
+          <p className="text-sm text-gray-200 font-medium">{book.author}</p>
         </div>
       </div>
 
